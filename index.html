@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ser & Estar — Ejercicios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #fdf8f0; --warm-white: #fffef9;
+      --terracotta: #c1440e; --terracotta-light: #e8673a;
+      --gold: #d4a017; --dark: #1a1208; --mid: #4a3520;
+      --muted: #8a7060; --border: #e0d5c5;
+      --correct: #2d6a4f; --wrong: #9b2226;
+      --correct-bg: #d8f3dc; --wrong-bg: #fde8e8;
+      --vocab: #1a4a7a; --vocab-bg: #e8f0fb;
+    }
+    body {
+      background-color: var(--cream); color: var(--dark);
+      font-family: 'Lato', sans-serif; font-weight: 300; min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 10% 0%, rgba(193,68,14,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 90% 100%, rgba(212,160,23,0.08) 0%, transparent 60%);
+    }
+    header {
+      text-align: center; padding: 3.5rem 1rem 2rem;
+      border-bottom: 1px solid var(--border); position: relative;
+    }
+    header::after {
+      content: ''; display: block; width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--terracotta), var(--gold));
+      margin: 1.2rem auto 0; border-radius: 2px;
+    }
+    .subtitle-tag {
+      font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--terracotta); font-weight: 700; margin-bottom: 0.6rem;
+    }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; color: var(--dark); line-height: 1.1; }
+    h1 em { color: var(--terracotta); font-style: italic; }
+    .header-desc { margin-top: 0.8rem; color: var(--muted); font-size: 0.95rem; letter-spacing: 0.03em; }
+    .header-desc span { font-style: italic; }
+
+    /* Nav */
+    .toc { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.5rem auto 0; max-width: 700px; padding: 0 1rem; }
+    .toc a { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--terracotta); border: 1px solid var(--border); border-radius: 50px; padding: 0.3rem 0.9rem; text-decoration: none; font-weight: 700; transition: background 0.15s, color 0.15s; }
+    .toc a:hover { background: var(--terracotta); color: #fff; }
+
+    main { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 1.35rem;
+      font-weight: 400; font-style: italic; color: var(--mid);
+      margin: 2.8rem 0 0.4rem; display: flex; align-items: center; gap: 0.7rem;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-en { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 1.2rem; font-style: italic; }
+
+    .exercise-card {
+      background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.4rem 1.8rem; margin-bottom: 1rem;
+      transition: box-shadow 0.2s;
+    }
+    .exercise-card:hover { box-shadow: 0 4px 20px rgba(26,18,8,0.07); }
+    .exercise-card.vocab-card { border-left: 3px solid var(--vocab); }
+
+    /* bilingual label */
+    .bilingual { font-size: 0.76rem; color: var(--muted); font-style: italic; margin-bottom: 0.55rem; line-height: 1.4; }
+
+    /* fill */
+    .fill-sentence { font-size: 1.05rem; line-height: 2; color: var(--dark); }
+    .fill-sentence .blank-wrap { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 0.15rem; }
+    .blank-input {
+      border: none; border-bottom: 2px solid var(--terracotta); background: transparent;
+      font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 400; color: var(--dark);
+      width: 100px; text-align: center; outline: none; padding: 2px 4px;
+      transition: border-color 0.2s, background 0.2s; border-radius: 2px 2px 0 0;
+    }
+    .blank-input:focus { border-color: var(--gold); background: rgba(212,160,23,0.05); }
+    .blank-input.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+    .blank-input.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+    .correction-text { font-size: 0.72rem; color: var(--correct); font-weight: 700; margin-top: 2px; display: none; }
+    .blank-input.wrong + .correction-text { display: block; }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+
+    /* vocab blank (wider) */
+    .blank-input.vocab-blank { width: 140px; border-bottom-color: var(--vocab); }
+    .blank-input.vocab-blank:focus { border-color: var(--gold); }
+    .blank-input.vocab-blank.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+    .blank-input.vocab-blank.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+
+    /* mc */
+    .mc-question { font-size: 1.05rem; margin-bottom: 0.9rem; line-height: 1.6; }
+    .mc-options { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .mc-btn {
+      border: 1.5px solid var(--border); background: var(--cream); color: var(--mid);
+      font-family: 'Lato', sans-serif; font-size: 0.9rem; padding: 0.45rem 1.1rem;
+      border-radius: 50px; cursor: pointer; transition: all 0.18s; font-weight: 400;
+    }
+    .mc-btn:hover:not(:disabled) { border-color: var(--terracotta); color: var(--terracotta); }
+    .mc-btn.selected  { border-color: var(--terracotta); background: var(--terracotta); color: #fff; }
+    .mc-btn.correct   { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+    .mc-btn.wrong     { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+    .mc-btn.show-correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+
+    /* transform */
+    .transform-prompt { font-size: 1rem; color: var(--muted); margin-bottom: 0.5rem; font-style: italic; }
+    .transform-source { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.7rem; color: var(--dark); }
+    .transform-input {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 6px;
+      padding: 0.6rem 0.9rem; font-family: 'Lato', sans-serif; font-size: 1rem;
+      background: var(--cream); color: var(--dark); outline: none; transition: border-color 0.2s;
+    }
+    .transform-input:focus { border-color: var(--gold); }
+    .transform-input.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+    .transform-input.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+    .answer-reveal { margin-top: 0.4rem; font-size: 0.82rem; color: var(--correct); font-weight: 700; display: none; }
+    .answer-reveal.visible { display: block; }
+
+    /* vocab translate input */
+    .vocab-translate-input {
+      width: 100%; border: 1.5px solid #b0c8e8; border-radius: 6px;
+      padding: 0.6rem 0.9rem; font-family: 'Lato', sans-serif; font-size: 1rem;
+      background: var(--cream); color: var(--dark); outline: none; transition: border-color 0.2s;
+    }
+    .vocab-translate-input:focus { border-color: var(--vocab); }
+    .vocab-translate-input.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+    .vocab-translate-input.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+
+    .word-box {
+      display: inline-block; background: var(--vocab-bg); color: var(--vocab);
+      font-weight: 700; border-radius: 5px; padding: 0.1rem 0.6rem;
+      font-size: 1.05rem; margin-right: 0.3rem;
+    }
+
+    /* cta */
+    .cta-wrap { text-align: center; margin-top: 3rem; }
+    .check-btn {
+      background: linear-gradient(135deg, var(--terracotta), var(--terracotta-light));
+      color: #fff; border: none; font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-style: italic; padding: 0.85rem 3rem;
+      border-radius: 50px; cursor: pointer; letter-spacing: 0.04em;
+      box-shadow: 0 4px 18px rgba(193,68,14,0.25); transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .check-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 24px rgba(193,68,14,0.33); }
+    .check-btn:active { transform: translateY(0); }
+
+    #score-banner {
+      display: none; background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; text-align: center; margin-top: 2.5rem;
+      animation: fadeUp 0.5s ease;
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .score-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .score-label { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--terracotta); }
+    .score-sub { color: var(--muted); margin-top: 0.3rem; font-size: 0.95rem; }
+
+    footer { text-align: center; padding: 1.5rem; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.05em; border-top: 1px solid var(--border); }
+    footer span { color: var(--terracotta); }
+
+    @media(max-width:520px){
+      .exercise-card { padding: 1.1rem 1.1rem; }
+      .blank-input { width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="subtitle-tag">Español · Presente de indicativo</p>
+  <h1><em>Ser</em> & <em>Estar</em></h1>
+  <p class="header-desc"><span>Completa los ejercicios y pulsa «Corregir» al final.</span><br>Complete the exercises and press "Check" at the end.</p>
+</header>
+
+<nav class="toc">
+  <a href="#s1">Rellena los huecos</a>
+  <a href="#s2">Opción múltiple</a>
+  <a href="#s3">¿Correcto?</a>
+  <a href="#s4">Transforma</a>
+  <a href="#s5">Vocabulario</a>
+  <a href="#s6">Traduce</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════
+  SECTION 1 · Fill in the blank
+  (SER / ESTAR conjugated forms)
+══════════════════════════════ -->
+<h2 class="section-title" id="s1"><span>✏️</span> Rellena los huecos</h2>
+<p class="section-en">Fill in the blank with the correct form of <em>ser</em> or <em>estar</em>.</p>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Escribe la forma correcta · EN: Write the correct form of the verb.</p>
+  <p class="fill-sentence">Ella <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> médica. Trabaja en el hospital.</p>
+  <p class="hint">💡 Profession → use <em>ser</em> · Profesión → usa <em>ser</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: ¿Dónde están mis cosas? · EN: Where are my things?</p>
+  <p class="fill-sentence">¿Dónde <span class="blank-wrap"><input class="blank-input" type="text" data-answer="están" autocomplete="off"/><span class="correction-text"></span></span> mis llaves?</p>
+  <p class="hint">💡 Location → <em>estar</em> · Ubicación → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Origen y ubicación a la vez · EN: Origin and current location in the same sentence.</p>
+  <p class="fill-sentence">Nosotros <span class="blank-wrap"><input class="blank-input" type="text" data-answer="somos" autocomplete="off"/><span class="correction-text"></span></span> de España, pero ahora <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estamos" autocomplete="off"/><span class="correction-text"></span></span> en México.</p>
+  <p class="hint">💡 Origin (<em>ser</em>) vs. temporary location (<em>estar</em>)</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Estado temporal del objeto · EN: The soup's temperature right now.</p>
+  <p class="fill-sentence">La sopa <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> muy caliente hoy.</p>
+  <p class="hint">💡 Temporary state → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Carácter vs. estado de ánimo · EN: Personality vs. current mood.</p>
+  <p class="fill-sentence">Él <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> muy simpático, pero hoy <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> de mal humor.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Eventos se expresan con <em>ser</em> · EN: Events use <em>ser</em>, not <em>estar</em>.</p>
+  <p class="fill-sentence">La reunión <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> a las tres en la sala de conferencias.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Estado físico después de un viaje · EN: Physical state after travelling.</p>
+  <p class="fill-sentence">Vosotros <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estáis|estais" autocomplete="off"/><span class="correction-text"></span></span> cansados después del viaje.</p>
+  <p class="hint">💡 Physical state → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Material de construcción · EN: The material something is made of.</p>
+  <p class="fill-sentence">Este edificio <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> de ladrillo rojo.</p>
+  <p class="hint">💡 Material → <em>ser</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Precio · EN: Asking for the price.</p>
+  <p class="fill-sentence">¿Cuánto <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> esa camisa azul?</p>
+  <p class="hint">💡 Price → <em>ser</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Característica permanente del cielo · EN: A permanent quality of the sky.</p>
+  <p class="fill-sentence">El cielo <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> azul, pero esta tarde <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> nublado.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Relación familiar · EN: Family relationship.</p>
+  <p class="fill-sentence">Elena y Luis <span class="blank-wrap"><input class="blank-input" type="text" data-answer="son" autocomplete="off"/><span class="correction-text"></span></span> hermanos.</p>
+  <p class="hint">💡 Relationship → <em>ser</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Situación actual de alguien · EN: Someone's current situation / marital status.</p>
+  <p class="fill-sentence">Mi tía <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> casada desde hace diez años.</p>
+  <p class="hint">💡 Marital status is a state → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Identidad y nacionalidad · EN: Identity and nationality.</p>
+  <p class="fill-sentence">Yo <span class="blank-wrap"><input class="blank-input" type="text" data-answer="soy" autocomplete="off"/><span class="correction-text"></span></span> español y <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estoy" autocomplete="off"/><span class="correction-text"></span></span> muy orgulloso de ello.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Descripción física permanente · EN: Permanent physical description.</p>
+  <p class="fill-sentence">Mi abuela <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> baja y tiene el pelo blanco.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Posición o lugar de un objeto · EN: Where an object is placed.</p>
+  <p class="fill-sentence">El libro <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> encima de la mesa.</p>
+  <p class="hint">💡 Position of object → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Resultado de una acción (participio) · EN: Result of an action with past participle.</p>
+  <p class="fill-sentence">La ventana <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> rota desde ayer.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Trabajo en curso · EN: Work in progress.</p>
+  <p class="fill-sentence">El informe <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> listo, puedes leerlo ahora.</p>
+  <p class="hint">💡 State of readiness → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Color como característica permanente · EN: Color as a permanent characteristic.</p>
+  <p class="fill-sentence">Las hojas de los árboles <span class="blank-wrap"><input class="blank-input" type="text" data-answer="son" autocomplete="off"/><span class="correction-text"></span></span> verdes en primavera.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Ciudad / capital · EN: Identifying a city as a capital.</p>
+  <p class="fill-sentence">Madrid <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> la capital de España.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Estado emocional momentáneo · EN: A momentary emotional state.</p>
+  <p class="fill-sentence">Los niños <span class="blank-wrap"><input class="blank-input" type="text" data-answer="están" autocomplete="off"/><span class="correction-text"></span></span> muy emocionados por la fiesta.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Ocupación en este momento · EN: Describing what someone is doing right now.</p>
+  <p class="fill-sentence">Tú <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estás" autocomplete="off"/><span class="correction-text"></span></span> estudiando español, ¿verdad?</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Adjetivo que cambia de significado según el verbo · EN: Adjective whose meaning shifts with the verb.</p>
+  <p class="fill-sentence">Este ejercicio <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> aburrido. (Es aburrido de por sí.)</p>
+  <p class="hint">💡 Inherent quality → <em>ser</em> · "boring by nature"</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Mismo adjetivo, diferente verbo · EN: Same adjective, different verb — different meaning.</p>
+  <p class="fill-sentence">Yo <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estoy" autocomplete="off"/><span class="correction-text"></span></span> aburrido ahora mismo. (Me aburro en este momento.)</p>
+  <p class="hint">💡 Current feeling → <em>estar</em> · "I feel bored right now"</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Materia o asignatura · EN: Subject or material.</p>
+  <p class="fill-sentence">Este libro <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> de matemáticas.</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: El tiempo atmosférico con <em>estar</em> · EN: Weather with <em>estar</em>.</p>
+  <p class="fill-sentence">Hoy <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> lloviendo mucho en Barcelona.</p>
+  <p class="hint">💡 Weather conditions → <em>estar</em> (or <em>hacer</em>)</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Posesión o pertenencia · EN: Ownership / possession.</p>
+  <p class="fill-sentence">Ese coche <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> de mi padre.</p>
+  <p class="hint">💡 Possession → <em>ser</em></p>
+</div>
+
+<!-- ══════════════════════════════
+  SECTION 2 · Multiple choice
+══════════════════════════════ -->
+<h2 class="section-title" id="s2"><span>🔘</span> Elige la opción correcta</h2>
+<p class="section-en">Choose the correct option · Elige la opción correcta.</p>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: La puerta · EN: The door — which verb and why?</p>
+  <p class="mc-question">«La puerta ___ abierta.» ¿Por qué? / Why?</p>
+  <div class="mc-options" data-correct="está — estado / state">
+    <button class="mc-btn">es — característica / characteristic</button>
+    <button class="mc-btn">está — estado / state</button>
+    <button class="mc-btn">son — plural</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: El café · EN: The coffee — which verb?</p>
+  <p class="mc-question">«El café ___ frío.» Elige el verbo correcto. / Choose the correct verb.</p>
+  <div class="mc-options" data-correct="está — estado temporal / temporary state">
+    <button class="mc-btn">es — característica permanente / permanent</button>
+    <button class="mc-btn">está — estado temporal / temporary state</button>
+    <button class="mc-btn">están — concordancia / agreement</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Capital del país · EN: Naming a country's capital.</p>
+  <p class="mc-question">«Madrid ___ la capital de España.»</p>
+  <div class="mc-options" data-correct="es">
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">estás</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Aburrido en clase · EN: Feeling bored in class right now.</p>
+  <p class="mc-question">«Yo ___ aburrido en clase hoy.» (No me gusta la clase.)</p>
+  <div class="mc-options" data-correct="estoy">
+    <button class="mc-btn">soy</button>
+    <button class="mc-btn">estoy</button>
+    <button class="mc-btn">es</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Evento en lugar · EN: A wedding event at a location.</p>
+  <p class="mc-question">«La boda ___ en la playa el sábado.» / "The wedding is at the beach on Saturday."</p>
+  <div class="mc-options" data-correct="es">
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">están</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Paella hecha · EN: The paella is ready (result of cooking).</p>
+  <p class="mc-question">«La paella ___ hecha. ¡Podemos comer!» / "The paella is done. We can eat!"</p>
+  <div class="mc-options" data-correct="está">
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">son</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Ser listo vs. estar listo · EN: "Clever" vs. "ready" — same word, different verb!</p>
+  <p class="mc-question">«¿___ listo para el examen?» (Are you ready for the exam?)</p>
+  <div class="mc-options" data-correct="¿Estás listo?">
+    <button class="mc-btn">¿Eres listo?</button>
+    <button class="mc-btn">¿Estás listo?</button>
+    <button class="mc-btn">¿Son listos?</button>
+  </div>
+  <p class="hint">💡 <em>Ser listo</em> = to be clever · <em>Estar listo</em> = to be ready</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Estar muerto · EN: Being dead (a state).</p>
+  <p class="mc-question">«El pez ___ muerto.» / "The fish is dead."</p>
+  <div class="mc-options" data-correct="está">
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">estás</button>
+  </div>
+  <p class="hint">💡 Death as a state → <em>estar</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Seguro como adjetivo · EN: "Sure / safe" as adjective with different verbs.</p>
+  <p class="mc-question">«Este barrio ___ muy seguro.» (This neighbourhood is very safe.)</p>
+  <div class="mc-options" data-correct="es">
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">estás</button>
+  </div>
+  <p class="hint">💡 Inherent characteristic of the neighbourhood → <em>ser</em></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Seguro con <em>estar</em> · EN: "Sure / certain" as a personal state.</p>
+  <p class="mc-question">«Yo ___ seguro de que la respuesta es correcta.» (I am sure the answer is correct.)</p>
+  <div class="mc-options" data-correct="estoy">
+    <button class="mc-btn">soy</button>
+    <button class="mc-btn">estoy</button>
+    <button class="mc-btn">es</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Hora del día · EN: Telling the time.</p>
+  <p class="mc-question">«___ las dos de la tarde.» / "It is two in the afternoon."</p>
+  <div class="mc-options" data-correct="son">
+    <button class="mc-btn">son</button>
+    <button class="mc-btn">están</button>
+    <button class="mc-btn">es</button>
+  </div>
+  <p class="hint">💡 Time → <em>ser</em> (plural for all hours except 1)</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Ser rico vs. estar rico · EN: "Wealthy" vs. "delicious"!</p>
+  <p class="mc-question">«¡Este chocolate ___ riquísimo!» (This chocolate is delicious!)</p>
+  <div class="mc-options" data-correct="está">
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">son</button>
+  </div>
+  <p class="hint">💡 <em>Estar rico</em> = to taste delicious · <em>Ser rico</em> = to be wealthy</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Descripción de persona · EN: Physical description of a person.</p>
+  <p class="mc-question">«Mi hermana ___ alta y delgada.» / "My sister is tall and slim."</p>
+  <div class="mc-options" data-correct="es">
+    <button class="mc-btn">es</button>
+    <button class="mc-btn">está</button>
+    <button class="mc-btn">son</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Estar de vacaciones · EN: Being on holiday (a temporary situation).</p>
+  <p class="mc-question">«Mis padres ___ de vacaciones en Italia.» / "My parents are on holiday in Italy."</p>
+  <div class="mc-options" data-correct="están">
+    <button class="mc-btn">son</button>
+    <button class="mc-btn">están</button>
+    <button class="mc-btn">es</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Ser de un lugar · EN: Being from a place (origin).</p>
+  <p class="mc-question">«¿De dónde ___ tú?» / "Where are you from?"</p>
+  <div class="mc-options" data-correct="eres">
+    <button class="mc-btn">estás</button>
+    <button class="mc-btn">eres</button>
+    <button class="mc-btn">es</button>
+  </div>
+  <p class="hint">💡 Origin → <em>ser</em></p>
+</div>
+
+<!-- ══════════════════════════════
+  SECTION 3 · Correct or not?
+══════════════════════════════ -->
+<h2 class="section-title" id="s3"><span>✅</span> ¿Correcto o incorrecto?</h2>
+<p class="section-en">Is the sentence correct or not? / ¿La frase es correcta o no?</p>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Embarazada — trampa clásica · EN: Classic false-friend trap!</p>
+  <p class="mc-question">«Ella <strong>es embarazada</strong>.» — ¿Correcto? / Is this correct?</p>
+  <div class="mc-options" data-correct="Incorrecto — debe ser «está embarazada»">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «está embarazada»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Participio con <em>estar</em> · EN: Past participle with <em>estar</em>.</p>
+  <p class="mc-question">«El libro <strong>está escrito</strong> en inglés.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Correcto / Correct">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «es escrito»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Precio con <em>ser</em> · EN: Price uses <em>ser</em>.</p>
+  <p class="mc-question">«¿Cuánto <strong>es</strong> la camisa?» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Correcto / Correct">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «está»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Ubicación de personas · EN: Location of people.</p>
+  <p class="mc-question">«Los estudiantes <strong>son</strong> en la biblioteca.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Incorrecto — debe ser «están en la biblioteca»">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «están en la biblioteca»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Evento con <em>ser</em> · EN: Event with <em>ser</em>.</p>
+  <p class="mc-question">«La fiesta <strong>es</strong> en mi casa esta noche.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Correcto / Correct">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «está»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Hora con <em>ser</em> · EN: Time with <em>ser</em>.</p>
+  <p class="mc-question">«<strong>Está</strong> la una de la mañana.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Incorrecto — debe ser «Es la una»">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «Es la una»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Muerto como estado · EN: Dead — a state, not a quality.</p>
+  <p class="mc-question">«Mi abuelo <strong>está</strong> muerto.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Correcto / Correct">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «es»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Inteligente como rasgo de personalidad · EN: Being intelligent as a personality trait.</p>
+  <p class="mc-question">«Ana <strong>está</strong> muy inteligente.» (Ana is very intelligent.) — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Incorrecto — debe ser «es muy inteligente»">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «es muy inteligente»</button>
+  </div>
+  <p class="hint">💡 Unless you mean she's acting smarter than usual today!</p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Color de ojos permanente · EN: Permanent eye color.</p>
+  <p class="mc-question">«Él <strong>está</strong> de ojos azules.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Incorrecto — debe ser «tiene ojos azules» o «es de ojos azules»">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «tiene ojos azules» o «es de ojos azules»</button>
+  </div>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: De viaje · EN: Being away on a trip.</p>
+  <p class="mc-question">«Mi jefe <strong>está</strong> de viaje esta semana.» — ¿Correcto?</p>
+  <div class="mc-options" data-correct="Correcto / Correct">
+    <button class="mc-btn">Correcto / Correct</button>
+    <button class="mc-btn">Incorrecto — debe ser «es»</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+  SECTION 4 · Transform
+══════════════════════════════ -->
+<h2 class="section-title" id="s4"><span>🔄</span> Transforma la frase</h2>
+<p class="section-en">Write the correct conjugated form of the verb in parentheses. / Escribe la forma conjugada correcta del verbo entre paréntesis.</p>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«Ellos ___ (estar) muy contentos hoy.»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="están"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«Yo ___ (ser) estudiante de idiomas.»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="soy"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«¿Vosotros ___ (estar) listos para salir?»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="estáis|estais"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«El cielo ___ (ser) azul.»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="es"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«Usted ___ (ser) muy amable, señor García.» / "You are very kind, Mr García."</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="es"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«Nosotras ___ (estar) en la oficina ahora mismo.»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="estamos"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«Tú ___ (ser) la persona más inteligente que conozco.»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="eres"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«¿___ (ser, vosotros) de Madrid o de Barcelona?»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="sois"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Conjugar · EN: Conjugate the verb.</p>
+  <p class="transform-prompt">Escribe la forma correcta / Write the correct form:</p>
+  <p class="transform-source">«Ustedes ___ (estar) invitados a la cena.» / "You are all invited to dinner."</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="están"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card">
+  <p class="bilingual">ES: Elegir el verbo correcto y conjugar · EN: Choose the right verb and conjugate.</p>
+  <p class="transform-prompt">Usa <em>ser</em> o <em>estar</em> en la forma correcta / Use <em>ser</em> or <em>estar</em> in the correct form:</p>
+  <p class="transform-source">«El concierto ___ (ser/estar) en el teatro esta noche.»</p>
+  <input class="transform-input" type="text" placeholder="Tu respuesta / Your answer…" data-answer="es"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<!-- ══════════════════════════════
+  SECTION 5 · Vocabulary fill-in
+  (Spanish word from definition/context)
+══════════════════════════════ -->
+<h2 class="section-title" id="s5"><span>📖</span> Vocabulario — Rellena</h2>
+<p class="section-en">Fill in the Spanish word that matches the English hint. All words appear naturally with <em>ser</em> or <em>estar</em>. / Escribe la palabra española que corresponde a la pista en inglés.</p>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Profesión del hospital · EN: The doctor (female).</p>
+  <p class="fill-sentence">Ella <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="médica" autocomplete="off"/><span class="correction-text"></span></span> — she is a <strong>doctor</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Profesión del derecho · EN: The lawyer (male).</p>
+  <p class="fill-sentence">Él es <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="abogado" autocomplete="off"/><span class="correction-text"></span></span> — he is a <strong>lawyer</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Lugar de trabajo · EN: Place where you work.</p>
+  <p class="fill-sentence">Estoy en la <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="oficina" autocomplete="off"/><span class="correction-text"></span></span> — I am at the <strong>office</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Estado de ánimo negativo · EN: Feeling sad / unhappy.</p>
+  <p class="fill-sentence">Hoy estoy muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="triste" autocomplete="off"/><span class="correction-text"></span></span> — I am very <strong>sad</strong> today.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Opuesto de triste · EN: Opposite of sad.</p>
+  <p class="fill-sentence">Ella siempre está <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="feliz|alegre" autocomplete="off"/><span class="correction-text"></span></span> — she is always <strong>happy</strong>.</p>
+  <p class="hint">💡 Acepta: <em>feliz</em> o <em>alegre</em></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Descripción de tamaño · EN: Describing a large / big thing.</p>
+  <p class="fill-sentence">El apartamento es muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="grande" autocomplete="off"/><span class="correction-text"></span></span> — the flat is very <strong>big</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Opuesto de grande · EN: Opposite of big.</p>
+  <p class="fill-sentence">El gato es <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="pequeño" autocomplete="off"/><span class="correction-text"></span></span> — the cat is <strong>small</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Temperatura alta · EN: Describing something hot.</p>
+  <p class="fill-sentence">El té está muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="caliente" autocomplete="off"/><span class="correction-text"></span></span> — the tea is very <strong>hot</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Temperatura baja · EN: Describing something cold.</p>
+  <p class="fill-sentence">El agua está <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="fría" autocomplete="off"/><span class="correction-text"></span></span> — the water is <strong>cold</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Descripción del carácter · EN: Describing someone as kind.</p>
+  <p class="fill-sentence">Mi profesora es muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="amable|simpática" autocomplete="off"/><span class="correction-text"></span></span> — my teacher is very <strong>kind / friendly</strong>.</p>
+  <p class="hint">💡 Acepta: <em>amable</em> o <em>simpática</em></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Opuesto de fácil · EN: Opposite of easy.</p>
+  <p class="fill-sentence">El examen es muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="difícil|dificil" autocomplete="off"/><span class="correction-text"></span></span> — the exam is very <strong>difficult</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Lugar donde estudias · EN: Place where you study.</p>
+  <p class="fill-sentence">Los estudiantes están en la <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="biblioteca" autocomplete="off"/><span class="correction-text"></span></span> — the students are at the <strong>library</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Vínculo familiar · EN: Family relationship — siblings.</p>
+  <p class="fill-sentence">Somos <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="hermanos" autocomplete="off"/><span class="correction-text"></span></span> — we are <strong>siblings / brothers</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Material muy común para ropa · EN: Common fabric for clothes.</p>
+  <p class="fill-sentence">Esta camiseta es de <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="algodón|algodon" autocomplete="off"/><span class="correction-text"></span></span> — this t-shirt is made of <strong>cotton</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Opuesto de abierto · EN: Opposite of open.</p>
+  <p class="fill-sentence">La tienda está <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="cerrada" autocomplete="off"/><span class="correction-text"></span></span> — the shop is <strong>closed</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Sentirse sin energía · EN: Feeling without energy.</p>
+  <p class="fill-sentence">Estoy muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="cansado|cansada" autocomplete="off"/><span class="correction-text"></span></span> hoy — I am very <strong>tired</strong> today.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Estación del año con flores · EN: Season with flowers.</p>
+  <p class="fill-sentence">Estamos en <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="primavera" autocomplete="off"/><span class="correction-text"></span></span> — it is <strong>spring</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Estar con hambre · EN: Feeling hungry.</p>
+  <p class="fill-sentence">Los niños están <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="hambrientos|con hambre" autocomplete="off"/><span class="correction-text"></span></span> — the children are <strong>hungry</strong>.</p>
+  <p class="hint">💡 Acepta: <em>hambrientos</em> o <em>con hambre</em></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Situación matrimonial · EN: Marital status — not single.</p>
+  <p class="fill-sentence">Ella está <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="casada" autocomplete="off"/><span class="correction-text"></span></span> — she is <strong>married</strong>.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: Opuesto de casado/a · EN: Opposite of married.</p>
+  <p class="fill-sentence">Él está <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="soltero" autocomplete="off"/><span class="correction-text"></span></span> — he is <strong>single</strong>.</p>
+</div>
+
+<!-- ══════════════════════════════
+  SECTION 6 · Translate to Spanish
+══════════════════════════════ -->
+<h2 class="section-title" id="s6"><span>🌍</span> Traduce al español</h2>
+<p class="section-en">Translate the English sentence into Spanish using <em>ser</em> or <em>estar</em>. / Traduce la frase al español usando <em>ser</em> o <em>estar</em>.</p>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: I am from London.</p>
+  <p class="transform-source">🇬🇧 "I am from London."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="soy de Londres|soy de london"/>
+  <p class="answer-reveal"></p>
+  <p class="hint">💡 Origin → <em>ser</em></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: She is tired.</p>
+  <p class="transform-source">🇬🇧 "She is tired."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="ella está cansada|está cansada"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: We are students.</p>
+  <p class="transform-source">🇬🇧 "We are students."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="somos estudiantes"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: The restaurant is closed on Mondays.</p>
+  <p class="transform-source">🇬🇧 "The restaurant is closed on Mondays."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="el restaurante está cerrado los lunes"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: Are you happy?</p>
+  <p class="transform-source">🇬🇧 "Are you happy?" (tú)</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="¿estás feliz?|¿estás contento?|¿estás contenta?|¿estás alegre?|estas feliz|estas contento|estas contenta"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: It is very hot today.</p>
+  <p class="transform-source">🇬🇧 "It is very hot today."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="hace mucho calor hoy|hoy hace mucho calor|está muy caliente hoy|hoy está muy caluroso"/>
+  <p class="answer-reveal"></p>
+  <p class="hint">💡 Weather: <em>hace calor</em> is most natural, but <em>está caliente</em> also accepted.</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: The party is on Saturday.</p>
+  <p class="transform-source">🇬🇧 "The party is on Saturday."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="la fiesta es el sábado|la fiesta es el sabado"/>
+  <p class="answer-reveal"></p>
+  <p class="hint">💡 Event → <em>ser</em></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: They are married.</p>
+  <p class="transform-source">🇬🇧 "They are married."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="están casados|están casadas"/>
+  <p class="answer-reveal"></p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: It is two o'clock.</p>
+  <p class="transform-source">🇬🇧 "It is two o'clock."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="son las dos|son las dos en punto"/>
+  <p class="answer-reveal"></p>
+  <p class="hint">💡 Time → <em>ser</em> (plural for hours ≠ 1)</p>
+</div>
+
+<div class="exercise-card vocab-card">
+  <p class="bilingual">ES: ¡Traduce! · EN: I am ready.</p>
+  <p class="transform-source">🇬🇧 "I am ready."</p>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="estoy listo|estoy lista"/>
+  <p class="answer-reveal"></p>
+  <p class="hint">💡 Ready = <em>estar listo/a</em> (not <em>ser</em>!)</p>
+</div>
+
+<!-- ══ Check button ══ -->
+<div class="cta-wrap">
+  <button class="check-btn" onclick="checkAll()">Corregir ejercicios / Check answers →</button>
+</div>
+
+<div id="score-banner">
+  <div class="score-emoji" id="score-emoji">🌟</div>
+  <div class="score-label" id="score-label">0 / 0</div>
+  <div class="score-sub" id="score-sub"></div>
+</div>
+
+</main>
+
+<footer>
+  Hecho con <span>❤</span> para aprender español · Made with love to learn Spanish
+</footer>
+
+<script>
+  function norm(s){ return s.trim().toLowerCase().replace(/[¿¡]/g,''); }
+
+  function checkAll(){
+    let total=0, correct=0;
+
+    document.querySelectorAll('.blank-input').forEach(input=>{
+      const accepted=input.dataset.answer.split('|').map(norm);
+      const val=norm(input.value);
+      const corrLabel=input.nextElementSibling;
+      input.classList.remove('correct','wrong');
+      total++;
+      if(accepted.includes(val)){
+        input.classList.add('correct');
+        corrLabel.style.display='none';
+        correct++;
+      } else {
+        input.classList.add('wrong');
+        corrLabel.textContent='✓ '+input.dataset.answer.split('|')[0];
+        corrLabel.style.display='block';
+      }
+    });
+
+    document.querySelectorAll('.mc-options').forEach(group=>{
+      const correctText=norm(group.dataset.correct);
+      const selected=group.querySelector('.mc-btn.selected');
+      const buttons=group.querySelectorAll('.mc-btn');
+      buttons.forEach(btn=>{
+        btn.disabled=true;
+        btn.classList.remove('correct','wrong','show-correct');
+      });
+      total++;
+      if(!selected){
+        buttons.forEach(btn=>{ if(norm(btn.textContent)===correctText) btn.classList.add('show-correct'); });
+      } else if(norm(selected.textContent)===correctText){
+        selected.classList.add('correct'); correct++;
+      } else {
+        selected.classList.add('wrong');
+        buttons.forEach(btn=>{ if(norm(btn.textContent)===correctText) btn.classList.add('show-correct'); });
+      }
+    });
+
+    document.querySelectorAll('.transform-input').forEach(input=>{
+      const accepted=input.dataset.answer.split('|').map(norm);
+      const val=norm(input.value);
+      const reveal=input.nextElementSibling;
+      input.classList.remove('correct','wrong');
+      total++;
+      if(accepted.includes(val)){
+        input.classList.add('correct');
+        if(reveal){ reveal.textContent=''; reveal.classList.remove('visible'); }
+        correct++;
+      } else {
+        input.classList.add('wrong');
+        if(reveal){ reveal.textContent='✓ '+input.dataset.answer.split('|')[0]; reveal.classList.add('visible'); }
+      }
+    });
+
+    const pct=total>0?correct/total:0;
+    const emoji=pct===1?'🥳':pct>=0.8?'🌟':pct>=0.5?'💪':'📚';
+    const sub=pct===1
+      ?'¡Perfecto! ¡Enhorabuena! / Perfect score! 🎉'
+      :pct>=0.8?'¡Muy bien! Repasa los errores en rojo. / Great job! Review the red ones.'
+      :pct>=0.5?'Buen intento. Revisa las respuestas incorrectas. / Good try — review the mistakes.'
+      :'Sigue practicando. ¡Tú puedes! / Keep practising — you\'ve got this! 💪';
+
+    document.getElementById('score-emoji').textContent=emoji;
+    document.getElementById('score-label').textContent=correct+' / '+total+' correctas';
+    document.getElementById('score-sub').textContent=sub;
+    const banner=document.getElementById('score-banner');
+    banner.style.display='block';
+    banner.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  document.querySelectorAll('.mc-options').forEach(group=>{
+    group.querySelectorAll('.mc-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        if(btn.disabled) return;
+        group.querySelectorAll('.mc-btn').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+  });
+</script>
+</body>
+</html>
