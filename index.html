@@ -41,10 +41,41 @@
     .header-desc { margin-top: 0.8rem; color: var(--muted); font-size: 0.95rem; letter-spacing: 0.03em; }
     .header-desc span { font-style: italic; }
 
-    /* Nav */
-    .toc { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.5rem auto 0; max-width: 700px; padding: 0 1rem; }
-    .toc a { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--terracotta); border: 1px solid var(--border); border-radius: 50px; padding: 0.3rem 0.9rem; text-decoration: none; font-weight: 700; transition: background 0.15s, color 0.15s; }
-    .toc a:hover { background: var(--terracotta); color: #fff; }
+    /* Tab bar */
+    .tab-bar {
+      display: flex; overflow-x: auto; gap: 0; border-bottom: 2px solid var(--border);
+      background: var(--warm-white); position: sticky; top: 0; z-index: 10;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 1; min-width: 90px; display: flex; flex-direction: column; align-items: center;
+      gap: 0.15rem; padding: 0.75rem 0.5rem 0.65rem; border: none; background: none;
+      cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
+      transition: background 0.15s, border-color 0.15s; color: var(--muted);
+      font-family: 'Lato', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(193,68,14,0.04); color: var(--mid); }
+    .tab-btn.tab-active { border-bottom-color: var(--terracotta); color: var(--terracotta); background: rgba(193,68,14,0.04); }
+    .tab-icon { font-size: 1.2rem; line-height: 1; }
+    .tab-label-es { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.2; }
+    .tab-label-en { font-size: 0.65rem; color: var(--muted); line-height: 1.1; }
+    .tab-active .tab-label-en { color: var(--terracotta); opacity: 0.7; }
+
+    /* Tab panels */
+    .tab-content { }
+    .tab-panel { }
+
+    /* Per-tab score banner */
+    .score-banner-tab {
+      display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+      background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.5rem; margin-top: 1.5rem;
+      animation: fadeUp 0.4s ease;
+    }
+    .score-emoji-tab { font-size: 1.8rem; }
+    .score-label-tab { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--terracotta); }
+    .score-sub-tab { font-size: 0.88rem; color: var(--muted); }
 
     main { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
 
@@ -176,6 +207,21 @@
       .exercise-card { padding: 1.1rem 1.1rem; }
       .blank-input { width: 80px; }
     }
+
+    /* Per-card inline check */
+    .card-footer { display: flex; align-items: center; gap: 0.7rem; margin-top: 0.9rem; flex-wrap: wrap; }
+    .card-check-btn {
+      font-family: 'Lato', sans-serif; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border: 1.5px solid var(--border); border-radius: 50px;
+      background: none; color: var(--muted); padding: 0.3rem 0.85rem;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .card-check-btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .card-check-btn.checked { border-color: var(--correct); color: var(--correct); }
+    .card-result { font-size: 0.8rem; font-weight: 700; }
+    .card-result.ok  { color: var(--correct); }
+    .card-result.err { color: var(--wrong); }
   </style>
 </head>
 <body>
@@ -186,21 +232,19 @@
   <p class="header-desc"><span>Completa los ejercicios y pulsa «Corregir» al final.</span><br>Complete the exercises and press "Check" at the end.</p>
 </header>
 
-<nav class="toc">
-  <a href="#s1">Rellena los huecos</a>
-  <a href="#s2">Opción múltiple</a>
-  <a href="#s3">¿Correcto?</a>
-  <a href="#s4">Transforma</a>
-  <a href="#s5">Vocabulario</a>
-  <a href="#s6">Traduce</a>
-</nav>
 
 <main>
+<div class="tab-bar" role="tablist">
+  <button class="tab-btn tab-active" role="tab" data-tab="s1" onclick="switchTab('s1')"><span class="tab-icon">✏️</span><span class="tab-label-es">Rellena</span><span class="tab-label-en">Fill in the blank</span></button>
+  <button class="tab-btn" role="tab" data-tab="s2" onclick="switchTab('s2')"><span class="tab-icon">🔘</span><span class="tab-label-es">Opción múltiple</span><span class="tab-label-en">Multiple choice</span></button>
+  <button class="tab-btn" role="tab" data-tab="s3" onclick="switchTab('s3')"><span class="tab-icon">✅</span><span class="tab-label-es">¿Correcto?</span><span class="tab-label-en">Correct or not?</span></button>
+  <button class="tab-btn" role="tab" data-tab="s4" onclick="switchTab('s4')"><span class="tab-icon">🔄</span><span class="tab-label-es">Transforma</span><span class="tab-label-en">Transform</span></button>
+  <button class="tab-btn" role="tab" data-tab="s5" onclick="switchTab('s5')"><span class="tab-icon">📖</span><span class="tab-label-es">Vocabulario</span><span class="tab-label-en">Vocabulary</span></button>
+  <button class="tab-btn" role="tab" data-tab="s6" onclick="switchTab('s6')"><span class="tab-icon">🌍</span><span class="tab-label-es">Traduce</span><span class="tab-label-en">Translate</span></button>
+</div>
 
-<!-- ══════════════════════════════
-  SECTION 1 · Fill in the blank
-  (SER / ESTAR conjugated forms)
-══════════════════════════════ -->
+<div class="tab-content">
+<div class="tab-panel" id="panel-s1" role="tabpanel">
 <h2 class="section-title" id="s1"><span>✏️</span> Rellena los huecos</h2>
 <p class="section-en">Fill in the blank with the correct form of <em>ser</em> or <em>estar</em>.</p>
 
@@ -352,6 +396,11 @@
 <!-- ══════════════════════════════
   SECTION 2 · Multiple choice
 ══════════════════════════════ -->
+
+<div class="cta-wrap"><button class="check-btn" onclick="checkTab('s1')">Corregir / Check answers →</button></div>
+<div id="score-s1" class="score-banner-tab" style="display:none"><span class="score-emoji-tab" id="emoji-s1">🌟</span><span class="score-label-tab" id="label-s1">0/0</span><span class="score-sub-tab" id="sub-s1"></span></div>
+</div>
+<div class="tab-panel" id="panel-s2" role="tabpanel" style="display:none">
 <h2 class="section-title" id="s2"><span>🔘</span> Elige la opción correcta</h2>
 <p class="section-en">Choose the correct option · Elige la opción correcta.</p>
 
@@ -514,6 +563,11 @@
 <!-- ══════════════════════════════
   SECTION 3 · Correct or not?
 ══════════════════════════════ -->
+
+<div class="cta-wrap"><button class="check-btn" onclick="checkTab('s2')">Corregir / Check answers →</button></div>
+<div id="score-s2" class="score-banner-tab" style="display:none"><span class="score-emoji-tab" id="emoji-s2">🌟</span><span class="score-label-tab" id="label-s2">0/0</span><span class="score-sub-tab" id="sub-s2"></span></div>
+</div>
+<div class="tab-panel" id="panel-s3" role="tabpanel" style="display:none">
 <h2 class="section-title" id="s3"><span>✅</span> ¿Correcto o incorrecto?</h2>
 <p class="section-en">Is the sentence correct or not? / ¿La frase es correcta o no?</p>
 
@@ -611,6 +665,11 @@
 <!-- ══════════════════════════════
   SECTION 4 · Transform
 ══════════════════════════════ -->
+
+<div class="cta-wrap"><button class="check-btn" onclick="checkTab('s3')">Corregir / Check answers →</button></div>
+<div id="score-s3" class="score-banner-tab" style="display:none"><span class="score-emoji-tab" id="emoji-s3">🌟</span><span class="score-label-tab" id="label-s3">0/0</span><span class="score-sub-tab" id="sub-s3"></span></div>
+</div>
+<div class="tab-panel" id="panel-s4" role="tabpanel" style="display:none">
 <h2 class="section-title" id="s4"><span>🔄</span> Transforma la frase</h2>
 <p class="section-en">Write the correct conjugated form of the verb in parentheses. / Escribe la forma conjugada correcta del verbo entre paréntesis.</p>
 
@@ -698,6 +757,11 @@
   SECTION 5 · Vocabulary fill-in
   (Spanish word from definition/context)
 ══════════════════════════════ -->
+
+<div class="cta-wrap"><button class="check-btn" onclick="checkTab('s4')">Corregir / Check answers →</button></div>
+<div id="score-s4" class="score-banner-tab" style="display:none"><span class="score-emoji-tab" id="emoji-s4">🌟</span><span class="score-label-tab" id="label-s4">0/0</span><span class="score-sub-tab" id="sub-s4"></span></div>
+</div>
+<div class="tab-panel" id="panel-s5" role="tabpanel" style="display:none">
 <h2 class="section-title" id="s5"><span>📖</span> Vocabulario — Rellena</h2>
 <p class="section-en">Fill in the Spanish word that matches the English hint. All words appear naturally with <em>ser</em> or <em>estar</em>. / Escribe la palabra española que corresponde a la pista en inglés.</p>
 
@@ -807,6 +871,11 @@
 <!-- ══════════════════════════════
   SECTION 6 · Translate to Spanish
 ══════════════════════════════ -->
+
+<div class="cta-wrap"><button class="check-btn" onclick="checkTab('s5')">Corregir / Check answers →</button></div>
+<div id="score-s5" class="score-banner-tab" style="display:none"><span class="score-emoji-tab" id="emoji-s5">🌟</span><span class="score-label-tab" id="label-s5">0/0</span><span class="score-sub-tab" id="sub-s5"></span></div>
+</div>
+<div class="tab-panel" id="panel-s6" role="tabpanel" style="display:none">
 <h2 class="section-title" id="s6"><span>🌍</span> Traduce al español</h2>
 <p class="section-en">Translate the English sentence into Spanish using <em>ser</em> or <em>estar</em>. / Traduce la frase al español usando <em>ser</em> o <em>estar</em>.</p>
 
@@ -885,17 +954,10 @@
   <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Ready = <em>estar listo/a</em> (not <em>ser</em>!)</p>
 </div>
 
-<!-- ══ Check button ══ -->
-<div class="cta-wrap">
-  <button class="check-btn" onclick="checkAll()">Corregir ejercicios / Check answers →</button>
+<div class="cta-wrap"><button class="check-btn" onclick="checkTab('s6')">Corregir / Check answers →</button></div>
+<div id="score-s6" class="score-banner-tab" style="display:none"><span class="score-emoji-tab" id="emoji-s6">🌟</span><span class="score-label-tab" id="label-s6">0/0</span><span class="score-sub-tab" id="sub-s6"></span></div>
 </div>
-
-<div id="score-banner">
-  <div class="score-emoji" id="score-emoji">🌟</div>
-  <div class="score-label" id="score-label">0 / 0</div>
-  <div class="score-sub" id="score-sub"></div>
 </div>
-
 </main>
 
 <footer>
@@ -903,6 +965,13 @@
 </footer>
 
 <script>
+  // ── Tab switching ──
+  function switchTab(id){
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('tab-active', b.dataset.tab===id));
+    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = p.id==='panel-'+id ? '' : 'none');
+    window.scrollTo({top: document.querySelector('.tab-bar').offsetTop - 8, behavior: 'smooth'});
+  }
+
   function toggleHint(btn){
     btn.classList.toggle('open');
     let hint = btn.nextElementSibling;
@@ -916,10 +985,13 @@
 
   function norm(s){ return s.trim().toLowerCase().replace(/[¿¡]/g,''); }
 
-  function checkAll(){
+  function checkAll(){ checkTab(document.querySelector('.tab-btn.tab-active').dataset.tab); }
+
+  function checkTab(sid){
+    const panel = document.getElementById('panel-'+sid);
     let total=0, correct=0;
 
-    document.querySelectorAll('.blank-input').forEach(input=>{
+    panel.querySelectorAll('.blank-input').forEach(input=>{
       const accepted=input.dataset.answer.split('|').map(norm);
       const val=norm(input.value);
       const corrLabel=input.nextElementSibling;
@@ -936,7 +1008,7 @@
       }
     });
 
-    document.querySelectorAll('.mc-options').forEach(group=>{
+    panel.querySelectorAll('.mc-options').forEach(group=>{
       const correctText=norm(group.dataset.correct);
       const selected=group.querySelector('.mc-btn.selected');
       const buttons=group.querySelectorAll('.mc-btn');
@@ -955,7 +1027,7 @@
       }
     });
 
-    document.querySelectorAll('.transform-input').forEach(input=>{
+    panel.querySelectorAll('.transform-input').forEach(input=>{
       const accepted=input.dataset.answer.split('|').map(norm);
       const val=norm(input.value);
       const reveal=input.nextElementSibling;
@@ -979,11 +1051,11 @@
       :pct>=0.5?'Buen intento. Revisa las respuestas incorrectas. / Good try — review the mistakes.'
       :'Sigue practicando. ¡Tú puedes! / Keep practising — you\'ve got this! 💪';
 
-    document.getElementById('score-emoji').textContent=emoji;
-    document.getElementById('score-label').textContent=correct+' / '+total+' correctas';
-    document.getElementById('score-sub').textContent=sub;
-    const banner=document.getElementById('score-banner');
-    banner.style.display='block';
+    document.getElementById('emoji-'+sid).textContent=emoji;
+    document.getElementById('label-'+sid).textContent=correct+' / '+total+' correctas';
+    document.getElementById('sub-'+sid).textContent=sub;
+    const banner=document.getElementById('score-'+sid);
+    banner.style.display='flex';
     banner.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
 
@@ -996,6 +1068,93 @@
       });
     });
   });
+
+  // ── Per-card check buttons ──
+  function checkCard(btn) {
+    const card = btn.closest('.exercise-card');
+    let total = 0, correct = 0;
+
+    // fill-in blanks
+    card.querySelectorAll('.blank-input').forEach(input => {
+      const accepted = input.dataset.answer.split('|').map(norm);
+      const val = norm(input.value);
+      const corrLabel = input.nextElementSibling;
+      input.classList.remove('correct','wrong');
+      total++;
+      if (accepted.includes(val)) {
+        input.classList.add('correct');
+        corrLabel.style.display = 'none';
+        correct++;
+      } else {
+        input.classList.add('wrong');
+        corrLabel.textContent = '✓ ' + input.dataset.answer.split('|')[0];
+        corrLabel.style.display = 'block';
+      }
+    });
+
+    // mc buttons
+    card.querySelectorAll('.mc-options').forEach(group => {
+      const correctText = norm(group.dataset.correct);
+      const selected = group.querySelector('.mc-btn.selected');
+      const buttons = group.querySelectorAll('.mc-btn');
+      buttons.forEach(b => { b.disabled = true; b.classList.remove('correct','wrong','show-correct'); });
+      total++;
+      if (!selected) {
+        buttons.forEach(b => { if (norm(b.textContent) === correctText) b.classList.add('show-correct'); });
+      } else if (norm(selected.textContent) === correctText) {
+        selected.classList.add('correct'); correct++;
+      } else {
+        selected.classList.add('wrong');
+        buttons.forEach(b => { if (norm(b.textContent) === correctText) b.classList.add('show-correct'); });
+      }
+    });
+
+    // transform / translate inputs
+    card.querySelectorAll('.transform-input').forEach(input => {
+      const accepted = input.dataset.answer.split('|').map(norm);
+      const val = norm(input.value);
+      const reveal = input.nextElementSibling;
+      input.classList.remove('correct','wrong');
+      total++;
+      if (accepted.includes(val)) {
+        input.classList.add('correct');
+        if (reveal && reveal.classList.contains('answer-reveal')) { reveal.textContent = ''; reveal.classList.remove('visible'); }
+        correct++;
+      } else {
+        input.classList.add('wrong');
+        if (reveal && reveal.classList.contains('answer-reveal')) { reveal.textContent = '✓ ' + input.dataset.answer.split('|')[0]; reveal.classList.add('visible'); }
+      }
+    });
+
+    // update the card result label
+    const resultEl = btn.nextElementSibling;
+    if (total === 0) return;
+    btn.classList.add('checked');
+    if (correct === total) {
+      resultEl.textContent = '✓ Correcto';
+      resultEl.className = 'card-result ok';
+    } else {
+      resultEl.textContent = correct + '/' + total + ' correctas';
+      resultEl.className = 'card-result err';
+    }
+  }
+
+  // Inject footer into every card on load
+  document.querySelectorAll('.exercise-card').forEach(card => {
+    const footer = document.createElement('div');
+    footer.className = 'card-footer';
+    const btn = document.createElement('button');
+    btn.className = 'card-check-btn';
+    btn.textContent = 'Comprobar / Check';
+    btn.onclick = function(){ checkCard(this); };
+    const result = document.createElement('span');
+    result.className = 'card-result';
+    footer.appendChild(btn);
+    footer.appendChild(result);
+    // insert after hint button/p if present, else append
+    card.appendChild(footer);
+  });
+
 </script>
 </body>
 </html>
