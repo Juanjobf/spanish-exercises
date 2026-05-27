@@ -81,7 +81,21 @@
     .blank-input.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
     .correction-text { font-size: 0.72rem; color: var(--correct); font-weight: 700; margin-top: 2px; display: none; }
     .blank-input.wrong + .correction-text { display: block; }
-    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+    .hint-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      margin-top: 0.6rem; background: none; border: 1px dashed var(--border);
+      border-radius: 50px; padding: 0.25rem 0.75rem; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.78rem; color: var(--muted);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .hint-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .hint-btn .arrow { transition: transform 0.2s; display: inline-block; }
+    .hint-btn.open .arrow { transform: rotate(90deg); }
+    .hint {
+      font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem;
+      font-style: italic; display: none;
+    }
+    .hint.visible { display: block; }
 
     /* vocab blank (wider) */
     .blank-input.vocab-blank { width: 140px; border-bottom-color: var(--vocab); }
@@ -193,25 +207,25 @@
 <div class="exercise-card">
   <p class="bilingual">ES: Escribe la forma correcta · EN: Write the correct form of the verb.</p>
   <p class="fill-sentence">Ella <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> médica. Trabaja en el hospital.</p>
-  <p class="hint">💡 Profession → use <em>ser</em> · Profesión → usa <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Profession → use <em>ser</em> · Profesión → usa <em>ser</em></p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: ¿Dónde están mis cosas? · EN: Where are my things?</p>
   <p class="fill-sentence">¿Dónde <span class="blank-wrap"><input class="blank-input" type="text" data-answer="están" autocomplete="off"/><span class="correction-text"></span></span> mis llaves?</p>
-  <p class="hint">💡 Location → <em>estar</em> · Ubicación → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Location → <em>estar</em> · Ubicación → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Origen y ubicación a la vez · EN: Origin and current location in the same sentence.</p>
   <p class="fill-sentence">Nosotros <span class="blank-wrap"><input class="blank-input" type="text" data-answer="somos" autocomplete="off"/><span class="correction-text"></span></span> de España, pero ahora <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estamos" autocomplete="off"/><span class="correction-text"></span></span> en México.</p>
-  <p class="hint">💡 Origin (<em>ser</em>) vs. temporary location (<em>estar</em>)</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Origin (<em>ser</em>) vs. temporary location (<em>estar</em>)</p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Estado temporal del objeto · EN: The soup's temperature right now.</p>
   <p class="fill-sentence">La sopa <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> muy caliente hoy.</p>
-  <p class="hint">💡 Temporary state → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Temporary state → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
@@ -227,19 +241,19 @@
 <div class="exercise-card">
   <p class="bilingual">ES: Estado físico después de un viaje · EN: Physical state after travelling.</p>
   <p class="fill-sentence">Vosotros <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estáis|estais" autocomplete="off"/><span class="correction-text"></span></span> cansados después del viaje.</p>
-  <p class="hint">💡 Physical state → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Physical state → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Material de construcción · EN: The material something is made of.</p>
   <p class="fill-sentence">Este edificio <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> de ladrillo rojo.</p>
-  <p class="hint">💡 Material → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Material → <em>ser</em></p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Precio · EN: Asking for the price.</p>
   <p class="fill-sentence">¿Cuánto <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> esa camisa azul?</p>
-  <p class="hint">💡 Price → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Price → <em>ser</em></p>
 </div>
 
 <div class="exercise-card">
@@ -250,13 +264,13 @@
 <div class="exercise-card">
   <p class="bilingual">ES: Relación familiar · EN: Family relationship.</p>
   <p class="fill-sentence">Elena y Luis <span class="blank-wrap"><input class="blank-input" type="text" data-answer="son" autocomplete="off"/><span class="correction-text"></span></span> hermanos.</p>
-  <p class="hint">💡 Relationship → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Relationship → <em>ser</em></p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Situación actual de alguien · EN: Someone's current situation / marital status.</p>
   <p class="fill-sentence">Mi tía <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> casada desde hace diez años.</p>
-  <p class="hint">💡 Marital status is a state → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Marital status is a state → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
@@ -272,7 +286,7 @@
 <div class="exercise-card">
   <p class="bilingual">ES: Posición o lugar de un objeto · EN: Where an object is placed.</p>
   <p class="fill-sentence">El libro <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> encima de la mesa.</p>
-  <p class="hint">💡 Position of object → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Position of object → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
@@ -283,7 +297,7 @@
 <div class="exercise-card">
   <p class="bilingual">ES: Trabajo en curso · EN: Work in progress.</p>
   <p class="fill-sentence">El informe <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> listo, puedes leerlo ahora.</p>
-  <p class="hint">💡 State of readiness → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 State of readiness → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
@@ -309,13 +323,13 @@
 <div class="exercise-card">
   <p class="bilingual">ES: Adjetivo que cambia de significado según el verbo · EN: Adjective whose meaning shifts with the verb.</p>
   <p class="fill-sentence">Este ejercicio <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> aburrido. (Es aburrido de por sí.)</p>
-  <p class="hint">💡 Inherent quality → <em>ser</em> · "boring by nature"</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Inherent quality → <em>ser</em> · "boring by nature"</p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Mismo adjetivo, diferente verbo · EN: Same adjective, different verb — different meaning.</p>
   <p class="fill-sentence">Yo <span class="blank-wrap"><input class="blank-input" type="text" data-answer="estoy" autocomplete="off"/><span class="correction-text"></span></span> aburrido ahora mismo. (Me aburro en este momento.)</p>
-  <p class="hint">💡 Current feeling → <em>estar</em> · "I feel bored right now"</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Current feeling → <em>estar</em> · "I feel bored right now"</p>
 </div>
 
 <div class="exercise-card">
@@ -326,13 +340,13 @@
 <div class="exercise-card">
   <p class="bilingual">ES: El tiempo atmosférico con <em>estar</em> · EN: Weather with <em>estar</em>.</p>
   <p class="fill-sentence">Hoy <span class="blank-wrap"><input class="blank-input" type="text" data-answer="está" autocomplete="off"/><span class="correction-text"></span></span> lloviendo mucho en Barcelona.</p>
-  <p class="hint">💡 Weather conditions → <em>estar</em> (or <em>hacer</em>)</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Weather conditions → <em>estar</em> (or <em>hacer</em>)</p>
 </div>
 
 <div class="exercise-card">
   <p class="bilingual">ES: Posesión o pertenencia · EN: Ownership / possession.</p>
   <p class="fill-sentence">Ese coche <span class="blank-wrap"><input class="blank-input" type="text" data-answer="es" autocomplete="off"/><span class="correction-text"></span></span> de mi padre.</p>
-  <p class="hint">💡 Possession → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Possession → <em>ser</em></p>
 </div>
 
 <!-- ══════════════════════════════
@@ -409,7 +423,7 @@
     <button class="mc-btn">¿Estás listo?</button>
     <button class="mc-btn">¿Son listos?</button>
   </div>
-  <p class="hint">💡 <em>Ser listo</em> = to be clever · <em>Estar listo</em> = to be ready</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 <em>Ser listo</em> = to be clever · <em>Estar listo</em> = to be ready</p>
 </div>
 
 <div class="exercise-card">
@@ -420,7 +434,7 @@
     <button class="mc-btn">está</button>
     <button class="mc-btn">estás</button>
   </div>
-  <p class="hint">💡 Death as a state → <em>estar</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Death as a state → <em>estar</em></p>
 </div>
 
 <div class="exercise-card">
@@ -431,7 +445,7 @@
     <button class="mc-btn">está</button>
     <button class="mc-btn">estás</button>
   </div>
-  <p class="hint">💡 Inherent characteristic of the neighbourhood → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Inherent characteristic of the neighbourhood → <em>ser</em></p>
 </div>
 
 <div class="exercise-card">
@@ -452,7 +466,7 @@
     <button class="mc-btn">están</button>
     <button class="mc-btn">es</button>
   </div>
-  <p class="hint">💡 Time → <em>ser</em> (plural for all hours except 1)</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Time → <em>ser</em> (plural for all hours except 1)</p>
 </div>
 
 <div class="exercise-card">
@@ -463,7 +477,7 @@
     <button class="mc-btn">está</button>
     <button class="mc-btn">son</button>
   </div>
-  <p class="hint">💡 <em>Estar rico</em> = to taste delicious · <em>Ser rico</em> = to be wealthy</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 <em>Estar rico</em> = to taste delicious · <em>Ser rico</em> = to be wealthy</p>
 </div>
 
 <div class="exercise-card">
@@ -494,7 +508,7 @@
     <button class="mc-btn">eres</button>
     <button class="mc-btn">es</button>
   </div>
-  <p class="hint">💡 Origin → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Origin → <em>ser</em></p>
 </div>
 
 <!-- ══════════════════════════════
@@ -573,7 +587,7 @@
     <button class="mc-btn">Correcto / Correct</button>
     <button class="mc-btn">Incorrecto — debe ser «es muy inteligente»</button>
   </div>
-  <p class="hint">💡 Unless you mean she's acting smarter than usual today!</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Unless you mean she's acting smarter than usual today!</p>
 </div>
 
 <div class="exercise-card">
@@ -710,7 +724,7 @@
 <div class="exercise-card vocab-card">
   <p class="bilingual">ES: Opuesto de triste · EN: Opposite of sad.</p>
   <p class="fill-sentence">Ella siempre está <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="feliz|alegre" autocomplete="off"/><span class="correction-text"></span></span> — she is always <strong>happy</strong>.</p>
-  <p class="hint">💡 Acepta: <em>feliz</em> o <em>alegre</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Acepta: <em>feliz</em> o <em>alegre</em></p>
 </div>
 
 <div class="exercise-card vocab-card">
@@ -736,7 +750,7 @@
 <div class="exercise-card vocab-card">
   <p class="bilingual">ES: Descripción del carácter · EN: Describing someone as kind.</p>
   <p class="fill-sentence">Mi profesora es muy <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="amable|simpática" autocomplete="off"/><span class="correction-text"></span></span> — my teacher is very <strong>kind / friendly</strong>.</p>
-  <p class="hint">💡 Acepta: <em>amable</em> o <em>simpática</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Acepta: <em>amable</em> o <em>simpática</em></p>
 </div>
 
 <div class="exercise-card vocab-card">
@@ -777,7 +791,7 @@
 <div class="exercise-card vocab-card">
   <p class="bilingual">ES: Estar con hambre · EN: Feeling hungry.</p>
   <p class="fill-sentence">Los niños están <span class="blank-wrap"><input class="blank-input vocab-blank" type="text" data-answer="hambrientos|con hambre" autocomplete="off"/><span class="correction-text"></span></span> — the children are <strong>hungry</strong>.</p>
-  <p class="hint">💡 Acepta: <em>hambrientos</em> o <em>con hambre</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Acepta: <em>hambrientos</em> o <em>con hambre</em></p>
 </div>
 
 <div class="exercise-card vocab-card">
@@ -801,7 +815,7 @@
   <p class="transform-source">🇬🇧 "I am from London."</p>
   <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="soy de Londres|soy de london"/>
   <p class="answer-reveal"></p>
-  <p class="hint">💡 Origin → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Origin → <em>ser</em></p>
 </div>
 
 <div class="exercise-card vocab-card">
@@ -837,7 +851,7 @@
   <p class="transform-source">🇬🇧 "It is very hot today."</p>
   <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="hace mucho calor hoy|hoy hace mucho calor|está muy caliente hoy|hoy está muy caluroso"/>
   <p class="answer-reveal"></p>
-  <p class="hint">💡 Weather: <em>hace calor</em> is most natural, but <em>está caliente</em> also accepted.</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Weather: <em>hace calor</em> is most natural, but <em>está caliente</em> also accepted.</p>
 </div>
 
 <div class="exercise-card vocab-card">
@@ -845,13 +859,13 @@
   <p class="transform-source">🇬🇧 "The party is on Saturday."</p>
   <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="la fiesta es el sábado|la fiesta es el sabado"/>
   <p class="answer-reveal"></p>
-  <p class="hint">💡 Event → <em>ser</em></p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Event → <em>ser</em></p>
 </div>
 
 <div class="exercise-card vocab-card">
   <p class="bilingual">ES: ¡Traduce! · EN: They are married.</p>
   <p class="transform-source">🇬🇧 "They are married."</p>
-  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="están casados|están casadas"/>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="están casados|están casadas|Ellos están casados|Ellas están casadas|estan casados|estan casadas|Ellos estan casados|Ellas estan casadas"/>
   <p class="answer-reveal"></p>
 </div>
 
@@ -860,15 +874,15 @@
   <p class="transform-source">🇬🇧 "It is two o'clock."</p>
   <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="son las dos|son las dos en punto"/>
   <p class="answer-reveal"></p>
-  <p class="hint">💡 Time → <em>ser</em> (plural for hours ≠ 1)</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Time → <em>ser</em> (plural for hours ≠ 1)</p>
 </div>
 
 <div class="exercise-card vocab-card">
   <p class="bilingual">ES: ¡Traduce! · EN: I am ready.</p>
   <p class="transform-source">🇬🇧 "I am ready."</p>
-  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="estoy listo|estoy lista"/>
+  <input class="vocab-translate-input transform-input" type="text" placeholder="Escribe en español…" data-answer="estoy listo|estoy lista|Yo estoy listo|Yo estoy lista"/>
   <p class="answer-reveal"></p>
-  <p class="hint">💡 Ready = <em>estar listo/a</em> (not <em>ser</em>!)</p>
+  <button class="hint-btn" onclick="toggleHint(this)"><span class="arrow">▶</span> Pista / Hint</button><p class="hint">💡 Ready = <em>estar listo/a</em> (not <em>ser</em>!)</p>
 </div>
 
 <!-- ══ Check button ══ -->
@@ -889,6 +903,17 @@
 </footer>
 
 <script>
+  function toggleHint(btn){
+    btn.classList.toggle('open');
+    let hint = btn.nextElementSibling;
+    if (!hint || !hint.classList.contains('hint')) {
+      hint = btn.closest('.exercise-card').querySelector('.hint');
+    }
+    if (!hint) return;
+    hint.classList.toggle('visible');
+    btn.querySelector('.arrow').textContent = hint.classList.contains('visible') ? '▼' : '▶';
+  }
+
   function norm(s){ return s.trim().toLowerCase().replace(/[¿¡]/g,''); }
 
   function checkAll(){
